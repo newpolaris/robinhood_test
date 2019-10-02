@@ -1,4 +1,4 @@
-project(multi VERSION 0.1.0)
+project(benchmark VERSION 0.1.0)
 
 include_directories(${ROOT_PATH})
 file(GLOB HEADER_LIST *.h *.hpp)

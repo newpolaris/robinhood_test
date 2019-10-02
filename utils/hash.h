@@ -35,7 +35,7 @@ inline uint32_t murmur3(const uint32_t* key, size_t wordCount, uint32_t seed) {
         h = (h << 13) | (h >> 19);
         h = (h * 5) + 0xe6546b64;
     } while (--i);
-    h ^= wordCount;
+    h ^= wordCount*4;
     h ^= h >> 16;
     h *= 0x85ebca6b;
     h ^= h >> 13;

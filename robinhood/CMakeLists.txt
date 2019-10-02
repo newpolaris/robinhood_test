@@ -7,6 +7,7 @@ include_directories(${ROOT_PATH})
 
 add_executable(robinhood main.cpp graphics_input_layout.cpp)
 target_include_directories(robinhood PRIVATE "${robinhood_SOURCE_DIR}")
+target_link_libraries(${PROJECT_NAME} PRIVATE "cityhash")
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
