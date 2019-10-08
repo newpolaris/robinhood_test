@@ -12,6 +12,14 @@
 using namespace std;
 using namespace el;
 
+#if defined(__GNUC__)
+#define EXPECT_LIKELY(x)    (__builtin_expect(!!(x), 1))
+#define EXPECT_UNLIKELY(x)  (__builtin_expect(!!(x), 0))
+#else
+#define EXPECT_LIKELY(x)    (x)
+#define EXPECT_UNLIKELY(x)  (x)
+#endif
+
 struct Vertex
 {
     float x, y, z;
@@ -50,7 +58,7 @@ void test0()
         input_layout_desc.setBindings(Vertex::getBindingDescription(i % 5));
 
         auto it = test.find(input_layout_desc);
-        if (it != test.end())
+        if (EXPECT_UNLIKELY(it != test.end()))
         {
            sum += it->second;
            continue;
@@ -112,10 +120,10 @@ void test1()
 
         MetalInputDesc desc {};
         const auto& bindings = input_layout_desc.getBindings();
-        for (int i = 0; i < bindings.size(); i++)
+        for (size_t i = 0; i < bindings.size(); i++)
             desc.binding[i] = bindings[i];
         const auto& attribs = input_layout_desc.getAttributes();
-        for (int i = 0; i < attribs.size(); i++) {
+        for (size_t i = 0; i < attribs.size(); i++) {
             desc.attribute[i]._binding = attribs[i].getBinding();
             desc.attribute[i]._format = attribs[i].getFormat();
             desc.attribute[i]._location = attribs[i].getLocation();
@@ -123,7 +131,7 @@ void test1()
         }
 
         auto it = test.find(desc);
-        if (it != test.end())
+        if (EXPECT_UNLIKELY(it != test.end()))
         {
            sum += it->second;
            continue;
@@ -150,10 +158,10 @@ void test2()
         
         MetalInputDesc desc {};
         const auto& bindings = input_layout_desc.getBindings();
-        for (int i = 0; i < bindings.size(); i++)
+        for (size_t i = 0; i < bindings.size(); i++)
             desc.binding[i] = bindings[i];
         const auto& attribs = input_layout_desc.getAttributes();
-        for (int i = 0; i < attribs.size(); i++) {
+        for (size_t i = 0; i < attribs.size(); i++) {
             desc.attribute[i]._binding = attribs[i].getBinding();
             desc.attribute[i]._format = attribs[i].getFormat();
             desc.attribute[i]._location = attribs[i].getLocation();
@@ -187,7 +195,7 @@ void test3()
     using HashFn = CityHashFn<MetalInputDesc>;
     tsl::robin_map<MetalInputDesc, int, HashFn> test;
     
-    for (int i = 0; i < numTest; i++)
+    for (size_t i = 0; i < numTest; i++)
     {
         GraphicsInputLayoutDesc input_layout_desc;
         input_layout_desc.setAttributes(Vertex::getAttributeDescription(i % 101));
@@ -195,10 +203,10 @@ void test3()
         
         MetalInputDesc desc {};
         const auto& bindings = input_layout_desc.getBindings();
-        for (int i = 0; i < bindings.size(); i++)
+        for (size_t i = 0; i < bindings.size(); i++)
             desc.binding[i] = bindings[i];
         const auto& attribs = input_layout_desc.getAttributes();
-        for (int i = 0; i < attribs.size(); i++) {
+        for (size_t i = 0; i < attribs.size(); i++) {
             desc.attribute[i]._binding = attribs[i].getBinding();
             desc.attribute[i]._format = attribs[i].getFormat();
             desc.attribute[i]._location = attribs[i].getLocation();
@@ -206,7 +214,7 @@ void test3()
         }
         
         auto it = test.find(desc);
-        if (it != test.end())
+        if (EXPECT_UNLIKELY(it != test.end()))
         {
             sum += it->second;
             continue;
